@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suitmedia_test/app_state.dart';
-import 'package:suitmedia_test/pages/second_screnn.dart';
+import 'package:suitmedia_test/pages/second_screen.dart';
 
 class FirstScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();

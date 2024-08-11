@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:suitmedia_test/app_state.dart';
 
 class ThirdScreen extends StatefulWidget {
+  const ThirdScreen({super.key});
+
   @override
   _ThirdScreenState createState() => _ThirdScreenState();
 }
@@ -45,35 +47,57 @@ class _ThirdScreenState extends State<ThirdScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Third Screen'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            page = 1;
-            context.read<AppState>().setUsers([]);
-          });
-          await fetchUsers();
-        },
-        child: ListView.builder(
-          itemCount: users.length + 1,
-          itemBuilder: (context, index) {
-            if (index == users.length) {
-              if (isLoading) return Center(child: CircularProgressIndicator());
-              return SizedBox.shrink();
-            }
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(users[index]['avatar']),
-              ),
-              title: Text(
-                  '${users[index]['first_name']} ${users[index]['last_name']}'),
-              subtitle: Text(users[index]['email']),
-              onTap: () {
-                Navigator.pop(context, users[index]['first_name']);
-              },
-            );
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left),
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
           },
+        ),
+        title: const Center(
+            child: Text('Third Screen',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              page = 1;
+              context.read<AppState>().setUsers([]);
+            });
+            await fetchUsers();
+          },
+          child: ListView.builder(
+            itemCount: users.length + 1,
+            itemBuilder: (context, index) {
+              if (index == users.length) {
+                if (isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return const SizedBox.shrink();
+              }
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(users[index]['avatar']),
+                  radius: 49,
+                ),
+                title: Text(
+                  '${users[index]['first_name']} ${users[index]['last_name']}',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(users[index]['email'],
+                    style: const TextStyle(fontSize: 10)),
+                onTap: () {
+                  Navigator.pop(
+                      context,
+                      users[index]['first_name'] +
+                          ' ' +
+                          users[index]['last_name']);
+                },
+              );
+            },
+          ),
         ),
       ),
     );
